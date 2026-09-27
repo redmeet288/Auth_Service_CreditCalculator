@@ -1,4 +1,7 @@
+import { json } from "express";
 import { Pool } from "pg";
+import { compare } from "../utils/password";
+import { tokenServise } from "./token.service";
 
 export class AuthService{
     constructor(private pool:Pool){}
@@ -28,6 +31,26 @@ export class AuthService{
     }
 
     async loginUser(username:string, password:string){
+        const user = await this.findUserByUsername(username)
+        if(!user){
+            return
+            //будет возвращать ошибку
+        }
+
+        const isValid = await compare(password, user.password_hash)
+        if(!isValid){
+            console.log("неверный пароль")
+            //будет возвращать ошибку
+        }
+
+
+        return tokenServise.iseeToken({
+            id: user.id,
+            username: user.username,
+            password_hash: user.password
+        })
+
+
 
 
         // выдача токенов
@@ -49,15 +72,12 @@ export class AuthService{
         try{
             const re = this.pool.query(`
                 SELECT * FROM user
-                WHERE username == $1`,
+                WHERE username == $1
+                RETURNING *`,
             [username])
             return((await re).rows[0])
         }catch(error){
             return(error)
         }
     }
-
-
-
-    
 }
