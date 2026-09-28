@@ -7,7 +7,8 @@ export class AuthController{
 
     async registerUser (req:Request, res:Response){
         const password_hash = await hash_password(req.body.password)
-        const rese = this.authService.registerUser(req.body.username, password_hash)
+        const rese = await this.authService.registerUser(req.body.username, password_hash)
+
         if(rese == null){
             return res.status(500).json({result: "ошибка при регистрации"})
         }
@@ -16,18 +17,17 @@ export class AuthController{
     }
 
     async loginUser(req:Request, res:Response){
-        const user = req.user;
-        const user_1 = await this.authService.findUserByUsername(user?.username as string)
+        const password = req.body.password;
+        const user_1 = await this.authService.findUserByUsername(req.body.username)
 
-
-        const password_d = await compare(user?.password as string, user_1.password_hash)
+        const password_d = await compare(req.body.password, user_1.password_hash)
         if(password_d){
-            const rese = this.authService.loginUser(user?.username as string, user?.password as string)
+            const rese = await this.authService.loginUser(req.body.username, req.body.password)
             if(rese == null){
                 return res.status(500).json({result: "ошибка при входе"})
             }
 
-            return res.status(200).json({result: "успешный вход"})
+            return res.status(200).json({result: "успешный вход", data:rese})
         }
         return res.status(403).json({result: "неверный логин или пароль"})
 

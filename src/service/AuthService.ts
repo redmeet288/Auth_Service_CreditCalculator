@@ -5,22 +5,22 @@ export class AuthService{
 
     async checkUsername (username: string){
         const check = await pool.query(`
-            SELECT * FROM users WHERE username = $1`, [username])
+            SELECT * FROM users WHERE usename = $1`, [username])
         return check.rows.length > 0;
     }
 
 
-    async registerUser(username:string, password:string){
+    async registerUser(username:string, password_hash:string){
 
-        if(await this.checkUsername(username) == false){
+        if(await this.checkUsername(username) == true){
             return null;
         }
         try{
             const res = await pool.query(`
-                INSERT INTO users (username, password)
+                INSERT INTO users (usename, password_hash)
                 VALUES ($1, $2)
                 RETURNING *`,
-                [username, password])
+                [username, password_hash])
             return(res.rows[0])
         }catch(error){
             return(null)
@@ -67,14 +67,15 @@ export class AuthService{
     }
     async findUserByUsername(username:string){
         try{
-            const re = pool.query(`
-                SELECT * FROM user
-                WHERE username == $1
-                RETURNING *`,
+            const res = await pool.query(`
+                SELECT * FROM users
+                WHERE usename = $1
+                LIMIT 1`,
             [username])
-            return((await re).rows[0])
+            return(res.rows[0])
         }catch(error){
-            return(error)
+            console.error('findUserByUsername error:', error)
+            return(null)
         }
     }
 }

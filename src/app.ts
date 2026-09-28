@@ -24,9 +24,9 @@ app.get("/health", async (req, res) => {
     return res.status(200).json({ status: "ok" })
 })
 
-app.post("/register", authController.registerUser)
+app.post("/register", authController.registerUser.bind(authController))
 
-app.get("/login", authMiddleware, authController.loginUser)
+app.post("/login", authController.loginUser.bind(authController))
 
 
 
