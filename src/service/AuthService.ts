@@ -1,13 +1,10 @@
-import { json } from "express";
-import { Pool } from "pg";
-import { compare } from "../utils/password";
-import { tokenServise } from "./token.service";
-
+import { compare } from "../utils/password.ts";
+import { tokenServise } from "./token.service.ts";
+import {pool} from "../utils/db.ts"
 export class AuthService{
-    constructor(private pool:Pool){}
 
     async checkUsername (username: string){
-        const check = await this.pool.query(`
+        const check = await pool.query(`
             SELECT * FROM users WHERE username = $1`, [username])
         return check.rows.length > 0;
     }
@@ -19,7 +16,7 @@ export class AuthService{
             return null;
         }
         try{
-            const res = await this.pool.query(`
+            const res = await pool.query(`
                 INSERT INTO users (username, password)
                 VALUES ($1, $2)
                 RETURNING *`,
@@ -70,7 +67,7 @@ export class AuthService{
     }
     async findUserByUsername(username:string){
         try{
-            const re = this.pool.query(`
+            const re = pool.query(`
                 SELECT * FROM user
                 WHERE username == $1
                 RETURNING *`,

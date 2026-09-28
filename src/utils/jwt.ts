@@ -1,6 +1,6 @@
 import jwt, {SignOptions} from "jsonwebtoken";
 import crypto from 'crypto'
-import { JWTPay } from "../models/JWTmodel";
+import { JWTPay } from "../models/JWTmodel.ts";
 
 
 export function generateAccessToken(paload: JWTPay){

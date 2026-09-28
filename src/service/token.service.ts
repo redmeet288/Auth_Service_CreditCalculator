@@ -1,7 +1,7 @@
-import { JWTPay, TokenPair } from "../models/JWTmodel"
-import { addDuration } from "../utils/duration"
-import { generateAccessToken, generateRefreshTorenString } from "../utils/jwt"
-import { refreshToken } from "./refresh.token"
+import { JWTPay, TokenPair } from "../models/JWTmodel.ts"
+import { addDuration } from "../utils/duration.ts"
+import { generateAccessToken, generateRefreshTorenString } from "../utils/jwt.ts"
+import { refreshToken } from "./refresh.token.ts"
 
 
 export const tokenServise = {
@@ -23,6 +23,6 @@ export const tokenServise = {
 
 }
 
-
+ 
 
 

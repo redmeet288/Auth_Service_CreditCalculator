@@ -1,5 +1,5 @@
-import {RefreshTokenRecord} from '../models/JWTmodel'
-import {pool} from "../utils/db"
+import {RefreshTokenRecord} from '../models/JWTmodel.ts'
+import {pool} from "../utils/db.ts"
 
 
 export const refreshToken={

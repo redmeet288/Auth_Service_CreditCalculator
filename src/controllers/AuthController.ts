@@ -1,6 +1,6 @@
-import { AuthService } from "../service/AuthService";
+import { AuthService } from "../service/AuthService.ts";
 import type { Request, Response } from "express";
-import { hash_password, compare } from "../utils/password";
+import { hash_password, compare } from "../utils/password.ts";
 
 export class AuthController{
     constructor(private authService:AuthService){}
